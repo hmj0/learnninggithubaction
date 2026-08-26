@@ -1,0 +1,40 @@
+name: learning pipeline
+
+
+permissions:
+    contents: read
+
+on: 
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    workflow_dispatch: 
+
+
+jobs:
+    learn:
+        permissions:
+            contents: read
+        runs-on: ubuntu-latest
+        steps:
+
+            - name: checkout du code
+              uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 #v5
+
+            - name: "j'ai recuperer le code"
+              run: |
+
+                    echo "Contenue du repo"
+                    ls -la
+            - name: checker les variables de contexte gihub
+              run: |
+
+                     echo "Le nom du repo: ${{github.repository}}"
+                     echo "Qui decleanche le pipeline: ${{github.actor}}"
+                     echo "Le nom de la branche qui declanche le pipeline: ${{github.ref_name}}"
+                     echo "L'evenement qui declanche le pipeline push ou pull_request: ${{github.event_name}}"
+
+              
+                     
+
