@@ -9,8 +9,6 @@ on:
 permissions:
     contents: read
 
-env:
-    TEST_SECRET: ${{secrets.TEST_SECRET}}
 
 jobs:
     learn:
@@ -32,12 +30,17 @@ jobs:
                      echo "Nom du user qui declanche le workflow ${{github.actor}}"
                      echo "Nom de la branche ou le workflow est lance ${{github.ref_name}}"
 
-            - name: Afficher le Secret
+            - name: Check Secret
+              env:
+                TEST_SECRET: ${{secrets.TEST_SECRET}}
+              
               run: |
 
-                     if [ ${#TEST_SECRET} -gt 0 ]; then
-                        echo "La valeur est $TEST_SECRET"
-                     else 
-                        echo "La variable TEST_SECRET est vide"
-                     fi 
+                     if [ -n "$TEST_SECRET" ]; then
+                        echo "Le secrets est non vide"
+                     else
+                        echo "Le secret est vide"
+                     fi
+
+
                        
