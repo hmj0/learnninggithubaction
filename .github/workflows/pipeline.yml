@@ -27,7 +27,7 @@ jobs:
             - name: Contexte du lancement du pipeline
               run: |
 
-                     echo "Nom du repo ${{github.repository}}\n"
+                     echo "Nom du repo ${{github.repository}}"
                      echo "Nom de l'event qui declanche le pipeline ${{github.event_name}}"
                      echo "Nom du user qui declanche le workflow ${{github.actor}}"
                      echo "Nom de la branche ou le workflow est lance ${{github.ref_name}}"
@@ -35,7 +35,7 @@ jobs:
             - name: Afficher le Secret
               run: |
 
-                     if [${#TEST_SECRET} -gt 0]; then
+                     if [ ${#TEST_SECRET} -gt 0 ]; then
                         echo "La valeur est $TEST_SECRET"
                      else 
                         echo "La variable TEST_SECRET est vide"
