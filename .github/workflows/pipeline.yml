@@ -32,14 +32,14 @@ jobs:
 
             - name: Check Secret
               env:
-                TEST_SECRETS: ${{secrets.TEST_SECRETS}}
+                TEST_SECRET: ${{secrets.TEST_SECRET}}
               
               run: |
 
-                     if [ -n "$TEST_SECRETS" ]; then
+                     if [ -n "$TEST_SECRET" ]; then
                         echo "Le secrets est non vide"
                      else
-                        echo "Le secret es vide"
+                        echo "Le secret est vide"
                      fi
 
 
