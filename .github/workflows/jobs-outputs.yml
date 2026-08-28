@@ -1,0 +1,48 @@
+name: github_outputs
+
+on:
+    workflow_dispatch: 
+
+
+jobs:
+    generate:
+        if: github.repository == 'hmj0/learnninggithubaction'
+        permissions:
+            contents: read
+        environment: test
+        env:
+            GITHUB_SHA: ${{github.sha}}
+        outputs:
+            outputs1: ${{steps.seven_sha.outputs.short_sha}}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Recuperation du sha
+              id: seven_sha
+              run: |
+
+                    echo "Recuperation des 7 premiers caracteres du sha"
+                    
+                    if [ -n "$GITHUB_SHA" -gt 0 ]; then
+                       
+                       echo "Le GITHUB_SHA est non vide"
+                       
+                       GITHUB_SHA_7="${GITHUB_SHA:0:7}"
+
+                       echo "short_sha=$GITHUN_SHA_7" >> "$GITHUB_OUTPUTS"
+
+                       echo -e "Les 7 premiers caracteres du sha: $SHORT_SHA"
+                    else
+                        echo "Le GITHUB_SHA est vide"
+                    fi
+    consume:
+        needs: [generate]
+        permissions:
+            contents: read
+        runs-on: ubuntu-latest
+        steps:
+            - name: Afficher le outputs1 du jobs generate
+              run: |
+                     
+                      echo "Valeur du outputs1 du job generate"
+                      echo "La valeur est: ${{needs.generate.outputs.outputs1}}"
+        
