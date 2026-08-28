@@ -47,4 +47,7 @@ jobs:
                      
                       echo "Valeur du outputs1 du job generate"
                       echo "La valeur est: ${{needs.generate.outputs.outputs1}}"
+                      echo "## Résultat du job generate" >> "$GITHUB_STEP_SUMMARY"
+                      echo "" >> "$GITHUB_STEP_SUMMARY"
+                      echo "**Output1 :** ${{ needs.generate.outputs.outputs1 }}" >> "$GITHUB_STEP_SUMMARY"
         
