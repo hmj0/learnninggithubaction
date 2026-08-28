@@ -32,7 +32,7 @@ jobs:
 
                        echo "short_sha=$GITHUB_SHA_7" >> "$GITHUB_OUTPUT"
 
-                       echo  "Les 7 premiers caracteres du sha: $short_sha"
+                       echo  "Les 7 premiers caracteres du sha: $GITHUB_SHA_7"
                     else
                         echo "Le GITHUB_SHA est vide"
                     fi
