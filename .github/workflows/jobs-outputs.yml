@@ -1,6 +1,8 @@
 name: github_outputs_2
 
 on:
+    push:
+        branches: [main]
     workflow_dispatch: 
 
 
@@ -22,13 +24,13 @@ jobs:
 
                     echo "Recuperation des 7 premiers caracteres du sha"
                     
-                    if [ -n "$GITHUB_SHA" -gt 0 ]; then
+                    if [ -n "$GITHUB_SHA"  ]; then
                        
                        echo "Le GITHUB_SHA est non vide"
                        
                        GITHUB_SHA_7="${GITHUB_SHA:0:7}"
 
-                       echo "short_sha=$GITHUN_SHA_7" >> "$GITHUB_OUTPUTS"
+                       echo "short_sha=$GITHUB_SHA_7" >> "$GITHUB_OUTPUT"
 
                        echo -e "Les 7 premiers caracteres du sha: $SHORT_SHA"
                     else
