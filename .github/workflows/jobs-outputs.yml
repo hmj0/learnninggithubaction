@@ -1,4 +1,4 @@
-name: github_outputs
+name: github_outputs_2
 
 on:
     workflow_dispatch: 
