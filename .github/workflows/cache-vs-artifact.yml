@@ -80,10 +80,10 @@ jobs:
               run: cat rapports/rapport.txt
             
             - name: Recuperation de la date et heure du cache
+              env:
+                MY_CACHE_DATE: ${{needs.build.outputs.outputs1}}
               run: |
-                
-                   my-cache-date = ${{needs.build.outputs.outputs1}}
-                   echo "la date est : $my-cache-date"
+                   echo "la date est : $MY_CACHE_DATE"
                  
             
               
