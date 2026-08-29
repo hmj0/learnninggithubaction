@@ -50,6 +50,7 @@ jobs:
                 path: '**/rapport.txt'
                 retention-days: 5
     receive:
+        needs: [build]
         permissions:
             contents: read
         runs-on: ubuntu-latest
