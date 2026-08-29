@@ -73,7 +73,7 @@ jobs:
                      find -type f -name "rapport.txt"
 
             - name: Afficher le contenu du livable
-              run: cat rapport/rapport.txt
+              run: cat rapports/rapport.txt
                  
             
               
