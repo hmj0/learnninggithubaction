@@ -64,7 +64,7 @@ jobs:
               uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
               with:
                 name: livrable
-                path: rapport.txt
+                path: rapports
 
             - name: Check Download
               run: |
@@ -73,7 +73,7 @@ jobs:
                      find -type f -name "rapport.txt"
 
             - name: Afficher le contenu du livable
-              run: cat rapport.txt
+              run: cat rapport/rapport.txt
                  
             
               
