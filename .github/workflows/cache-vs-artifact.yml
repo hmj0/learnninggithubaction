@@ -17,6 +17,8 @@ jobs:
         if: (github.event_name == 'push' && github.ref_name == 'main') || github.event.inputs.action == 'plan'
         permissions:
             contents: read
+        outputs: 
+          outputs1: ${{steps.version.outputs.cache_date}}
         runs-on: ubuntu-latest
         steps:
             - name: preparation du cache
@@ -25,9 +27,11 @@ jobs:
                 persist-credentials: false
 
             - name: creation du cache
+              id: version
               run: |
                      mkdir -p fake-deps/
                      echo "contenu" > fake-deps/data.txt
+                     echo "cache_date=$date" >> "$GITHUB_OUTPUT"
 
 
             - name: Definition du cache
@@ -74,6 +78,9 @@ jobs:
 
             - name: Afficher le contenu du livable
               run: cat rapports/rapport.txt
+            
+            - name: Recuperation de la date et heure du cache
+              run: echo "${{needs.build.outputs.outputs1}}"
                  
             
               
