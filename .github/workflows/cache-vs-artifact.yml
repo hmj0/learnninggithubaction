@@ -71,6 +71,9 @@ jobs:
 
                      echo "Check du upload"
                      find -type f -name "rapport.txt"
+
+            - name: Afficher le contenu du livable
+              run: cat rapport.txt
                  
             
               
