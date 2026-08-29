@@ -1,0 +1,79 @@
+name: cache vs artifact
+
+on:
+    push:
+        branches: [main,test-github]
+    workflow_dispatch: 
+        inputs:
+            action:
+                description: "Un choix pour lancer le workflow"
+                required: true
+                default: plan
+                type: choice
+                options: [plan,apply,destroy]
+
+jobs:
+    build:
+        if: (github.event_name == 'push' && github.ref_name == 'main') || github.event.inputs.action == 'plan'
+        permissions:
+            contents: read
+        runs-on: ubuntu-latest
+        steps:
+            - name: preparation du cache
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7
+              with:
+                persist-credentials: false
+
+            - name: creation du cache
+              run: |
+                     mkdir -p fake-deps/
+                     echo "contenu" > fake-deps/data.txt
+
+
+            - name: Definition du cache
+              uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 #5.1.0
+              with:
+                path: '**/fake-deps/data.txt'
+                key: echo-${{runner.os}}-${{hashFiles('**/fake-deps/data.txt')}}
+                restore-keys: |
+                                echo-${{runner.os}}-
+                                echo-
+
+            - name: Creation de l'artefact
+              run: |
+                     echo "build terminé le $(date)" > rapport.txt
+
+            - name: Upload de l'artefact
+              uses: actions/upload-artifact@068fe031ff84375304bd325845b47545a02fa174 #v7
+              with:
+                name: livrable
+                path: '**/rapport.txt'
+                retention-days: 5
+    receive:
+        permissions:
+            contents: read
+        runs-on: ubuntu-latest
+        steps:
+            - name: preparation du cache
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7
+              with:
+                persist-credentials: false
+
+            - name: Download artifact
+              uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+              with:
+                name: livrable
+                path: rapport.txt
+
+            - name: Check Download
+              run: |
+
+                     echo "Check du upload"
+                     find -type f -name "rapport.txt"
+                 
+            
+              
+            
+            
+
+
