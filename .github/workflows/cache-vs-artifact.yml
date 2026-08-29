@@ -31,7 +31,7 @@ jobs:
               run: |
                      mkdir -p fake-deps/
                      echo "contenu" > fake-deps/data.txt
-                     echo "cache_date=$date" >> "$GITHUB_OUTPUT"
+                     echo "cache_date=$(date)" >> "$GITHUB_OUTPUT"
 
 
             - name: Definition du cache
