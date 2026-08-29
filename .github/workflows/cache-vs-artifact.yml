@@ -25,23 +25,29 @@ jobs:
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7
               with:
                 persist-credentials: false
-
-            - name: creation du cache
-              id: version
-              run: |
-                     mkdir -p fake-deps/
-                     echo "contenu" > fake-deps/data.txt
-                     echo "cache_date=$(date)" >> "$GITHUB_OUTPUT"
-
-
+            
+            
             - name: Definition du cache
+              id: cache
               uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 #5.1.0
               with:
                 path: '**/fake-deps/data.txt'
-                key: echo-${{runner.os}}-${{hashFiles('**/fake-deps/data.txt')}}
+                key: fake-deps-${{runner.os}}-${{hashFiles('**/fake-deps/data.txt')}}
                 restore-keys: |
-                                echo-${{runner.os}}-
-                                echo-
+                                fake-deps-${{runner.os}}-
+                                fake-deps-
+
+            - name: creation du cache
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: |
+                     mkdir -p fake-deps/
+                     echo "contenu" > fake-deps/data.txt
+
+            - name: Date du cache
+              id: version
+              run:  echo "cache_date=$(date)" >> "$GITHUB_OUTPUT"
+
+
 
             - name: Creation de l'artefact
               run: |
