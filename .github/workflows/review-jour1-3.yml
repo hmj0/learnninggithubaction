@@ -40,7 +40,7 @@ jobs:
               with:
                 path: '**/truth-file.txt'
                 key: truth-file-${{runner.os}}-${{hashFiles('**/truth-file.txt')}}
-                restore-key: |
+                restore-keys: |
                                truth-file-${{runner.os}}-
                                truth-file-
             
@@ -80,7 +80,7 @@ jobs:
               uses: actions/upload-artifact@v7
               with:
                 name: Artifact-Shared
-                path: '**/artifact-folder/file.txt'
+                path: artifact-folder/file.txt
                 retention-days: 1
             
     
