@@ -33,16 +33,16 @@ jobs:
               with:
                 path: '**/fake-deps/data.txt'
                 key: fake-deps-${{runner.os}}-${{hashFiles('**/fake-deps/data.txt')}}
-                restore-keys: |
-                                fake-deps-${{runner.os}}-
-                                fake-deps-
+                #restore-keys: |
+                #                fake-deps-${{runner.os}}-
+                #                fake-deps-
 
             - name: Afficher le contenu du cache
               if: steps.cache.outputs.cache-hit == 'true'
               run: |
                       cat fake-deps/data.txt
 
-            - name: Afficher le contenu du cache
+            - name: status du cache
               if: steps.cache.outputs.cache-hit != 'true'
               run: echo "Cache non trouve"
 
