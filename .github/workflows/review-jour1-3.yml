@@ -36,7 +36,7 @@ jobs:
             
             - name: Definition du cache
               id: cache_id
-              uses: actions/cache@v7
+              uses: actions/cache@v5
               with:
                 path: '**/truth-file.txt'
                 key: truth-file-${{runner.os}}-${{hashFiles('**/truth-file.txt')}}
