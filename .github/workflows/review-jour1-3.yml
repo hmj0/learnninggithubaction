@@ -4,7 +4,7 @@ on:
     push:
         branches: [main]
     pull_request: 
-        branches: [main]
+        branches: [main,tes-branch]
         types: [opened,reopened,synchronize]
     workflow_dispatch: 
         inputs:
@@ -30,13 +30,13 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout du code 
-              uses: actions/checkout@v7
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7
               with:
                 persist-credentials: false
             
             - name: Definition du cache
               id: cache_id
-              uses: actions/cache@v5
+              uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
               with:
                 path: '**/truth-file.txt'
                 key: truth-file-${{runner.os}}-${{hashFiles('**/truth-file.txt')}}
@@ -61,7 +61,7 @@ jobs:
                      echo "Nom de celui qui delanche le workflow: ${ACTOR}"
                      if [ "${EVENT_TRIGGER}" == 'push' ]; then
                         echo "Le nom du event trigger: ${EVENT_TRIGGER}"
-                     elif [ "${{ env.EVENT_TRIGGER }}" == 'pull_request' ]; then
+                     elif [ "${EVENT_TRIGGER}" == 'pull_request' ]; then
                         echo "Le nom du event trigger: ${HEAD_REF}"
                      else
                          echo "Le nom du event trigger : ${EVENT_TRIGGER}"
@@ -77,7 +77,7 @@ jobs:
                     echo "Hello je suis l' artifact a partage" >> file.txt
 
             - name: Upload de l'artifact
-              uses: actions/upload-artifact@v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                 name: Artifact-Shared
                 path: artifact-folder/file.txt
@@ -93,7 +93,7 @@ jobs:
                     echo "Le output: ${{needs.prepare.outputs.outputs_job}}"
 
             - name: Download d l'artifact
-              uses: actions/download-artifact@v7
+              uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
               with:
                 name: Artifact-Shared
                 path: dest-artifact
