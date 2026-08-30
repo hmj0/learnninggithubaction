@@ -37,11 +37,15 @@ jobs:
                                 fake-deps-${{runner.os}}-
                                 fake-deps-
 
-            - name: creation du cache
-              if: steps.cache.outputs.cache-hit != 'true'
+            - name: Afficher le contenu du cache
+              if: steps.cache.outputs.cache-hit == 'true'
               run: |
-                     mkdir -p fake-deps/
-                     echo "contenu" > fake-deps/data.txt
+                      cat fake-deps/data.txt
+
+            - name: Afficher le contenu du cache
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: echo "Cache non trouve"
+
 
             - name: Date du cache
               id: version
