@@ -1,0 +1,130 @@
+name: review-jour1-3
+
+on:
+    push:
+        branches: [main]
+    pull_request: 
+        branches: [main]
+        types: [opened,reopened,synchronize]
+    workflow_dispatch: 
+        inputs:
+            action:
+                type: choice
+                description: "Un choix est necessaire"
+                required: true
+                default: plan
+                options:
+                    - plan
+                    - apply
+                    - destroy
+
+
+permissions:
+    contents: read
+
+jobs:
+    prepare:
+        if: (github.event_name == 'push' || github.event_name == 'pull_request' || github.event.inputs.action == 'plan')
+        outputs:
+            outputs_job: ${{steps.version_id.outputs.version}}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout du code 
+              uses: actions/checkout@v7
+              with:
+                persist-credentials: false
+            
+            - name: Definition du cache
+              id: cache_id
+              uses: actions/cache@v7
+              with:
+                path: '**/truth-file.txt'
+                key: truth-file-${{runner.os}}-${{hashFiles('**/truth-file.txt')}}
+                restore-key: |
+                               truth-file-${{runner.os}}-
+                               truth-file-
+            
+            - name: Status du cache
+              if: steps.cache_id.outputs.cache-hit != 'true'
+              run: |
+                     echo  "Echec du cache-hit: $(date)"
+
+            - name: Contexte du workflow
+              env:
+                 EVENT_TRIGGER: ${{github.event_name}}
+                 HEAD_REF: ${{ github.head_ref }}
+                 REPOSITORY: ${{ github.repository }}
+                 ACTOR: ${{ github.actor }}
+              run: |
+
+                     echo "Nom du reporitory: ${REPOSITORY}"
+                     echo "Nom de celui qui delanche le workflow: ${ACTOR}"
+                     if [ "${EVENT_TRIGGER}" == 'push' ]; then
+                        echo "Le nom du event trigger: ${EVENT_TRIGGER}"
+                     elif [ "${{ env.EVENT_TRIGGER }}" == 'pull_request' ]; then
+                        echo "Le nom du event trigger: ${HEAD_REF}"
+                     else
+                         echo "Le nom du event trigger : ${EVENT_TRIGGER}"
+                     fi
+            - name: Outputs de job
+              id: version_id
+              run: |
+                     echo "version=v:$(date)" >> "$GITHUB_OUTPUT"
+            - name: Creation du artifact
+              run: |
+
+                    mkdir -p artifact-folder && cd artifact-folder
+                    echo "Hello je suis l' artifact a partage" >> file.txt
+
+            - name: Upload de l'artifact
+              uses: actions/upload-artifact@v7
+              with:
+                name: Artifact-Shared
+                path: '**/artifact-folder/file.txt'
+                retention-days: 1
+            
+    
+    build:
+        needs: [prepare]
+        runs-on: ubuntu-latest
+        steps:
+            - name: Afficher le output
+              run: |
+                    echo "Le output: ${{needs.prepare.outputs.outputs_job}}"
+
+            - name: Download d l'artifact
+              uses: actions/download-artifact@v7
+              with:
+                name: Artifact-Shared
+                path: dest-artifact
+
+            - name: Check de l'artefact
+              run: |
+            
+                    cat dest-artifact/file.txt
+
+            - name: Afficher le résumé
+              run: |
+                      echo "Valeur du output1 du job prepare"
+                      echo "La valeur est : ${{ needs.prepare.outputs.outputs_job }}"
+
+                      cat <<EOF >> "$GITHUB_STEP_SUMMARY"
+                      ## 📦 Artifact obtenu
+
+                      Voici l'artifact obtenu :
+
+                      - **Nom :** \`Artifact-Shared\`
+                      - **Fichier :** \`file.txt\`
+                      - **Statut :** ✅ Généré avec succès
+
+                      ## 📋 Résultat du job prepare
+
+                      **Output1 :** \`${{ needs.prepare.outputs.outputs_job }}\`
+                      EOF
+        
+
+              
+                         
+                                
+            
+            
