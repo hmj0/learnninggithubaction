@@ -1,0 +1,21 @@
+name: caller_workflow
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch: 
+        inputs:
+            action: 
+                type: choice
+                required: true
+                default: me
+                options:
+                    - me
+                    - you
+
+jobs:
+
+    caller1:
+        uses: ./.github/workflows/reusable-build.yml
+        with:
+            ubuntu_version: 'ubuntu-latest'

@@ -1,0 +1,25 @@
+name: reusable
+
+on:
+    workflow_call: 
+        inputs:
+            ubuntu_version:
+                required: true
+                type: string
+
+
+permissions:
+    contents: read
+
+jobs:
+    update:
+        runs-on: ${{inputs.ubuntu_version}}
+        steps:
+            - name: recuperation du code
+              uses: actions/checkout@v7
+            - name: check du contents
+              run: |
+
+                     echo "hello world"
+                     cat /etc/release
+
