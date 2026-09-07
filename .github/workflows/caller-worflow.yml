@@ -19,3 +19,18 @@ jobs:
         uses: ./.github/workflows/reusable-build.yml
         with:
             ubuntu_version: 'ubuntu-latest'
+
+    caller2:
+        needs: caller1
+        env:
+          OUTPUT_CALLER1: ${{needs.caller1.outputs.firstoutput}}
+        runs-on: ubuntu-latest
+        steps:
+            - name: recuperation du output
+              run: | 
+
+                   echo "Affiche L'artifact"
+                   echo "$OUTPUT_CALLER1"
+                       
+
+                     

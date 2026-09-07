@@ -7,6 +7,11 @@ on:
                 required: true
                 type: string
 
+        outputs:
+            firstoutput:
+                description: "Output pour le reusable workflow"
+                value: ${{jobs.update.outputs.output1}}
+
 
 permissions:
     contents: read
@@ -14,6 +19,8 @@ permissions:
 jobs:
     update:
         runs-on: ${{inputs.ubuntu_version}}
+        outputs:
+            output1: ${{steps.file_id.outputs.msg}}
         steps:
             - name: recuperation du code
               uses: actions/checkout@v7
@@ -22,4 +29,12 @@ jobs:
 
                      echo "hello world"
                      cat /etc/os-release
+
+            - name: Fichier Artifact
+              id: file_id
+              run: |
+
+                    echo "Le fichier artifact"
+                    echo "msg=Hello, je suis le fichier artifact a uploader dans le caller_workflow" >> "$GITHUB_OUTPUT"
+                    
 
