@@ -3,7 +3,7 @@ name: reusable
 on:
     workflow_call: 
         inputs:
-            ubuntu_version:
+            msg_artifact:
                 required: true
                 type: string
 
@@ -13,28 +13,40 @@ on:
                 value: ${{jobs.update.outputs.output1}}
 
 
+                
+
+
 permissions:
     contents: read
 
 jobs:
     update:
-        runs-on: ${{inputs.ubuntu_version}}
+        runs-on: ubuntu-latest
         outputs:
             output1: ${{steps.file_id.outputs.msg}}
         steps:
-            - name: recuperation du code
-              uses: actions/checkout@v7
-            - name: check du contents
+
+            - name: Version du os
               run: |
 
                      echo "hello world"
                      cat /etc/os-release
 
-            - name: Fichier Artifact
+            - name: Creation de l'artifact
               id: file_id
+
+              env:
+                ARTIFACT: ${{inputs.msg_artifact}}
               run: |
+                    echo "msg=$ARTIFACT" >> "$GITHUB_OUTPUT"
+                    echo "$ARTIFACT" >> file.txt
+            
+            - name: Artifact Upload
+              uses: actions/upload-artifact@v7
+              with:
+                name: upload_artifact
+                path: file.txt
+            
 
-                    echo "Le fichier artifact"
-                    echo "msg=Hello, je suis le fichier artifact a uploader dans le caller_workflow" >> "$GITHUB_OUTPUT"
-                    
 
+         

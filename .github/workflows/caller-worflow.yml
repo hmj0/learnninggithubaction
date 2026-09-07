@@ -18,7 +18,7 @@ jobs:
     caller1:
         uses: ./.github/workflows/reusable-build.yml
         with:
-            ubuntu_version: 'ubuntu-latest'
+            msg_artifact: 'Hello, je suis le fichier artifact a uploader dans le caller_workflow'
 
     caller2:
         needs: caller1
@@ -30,13 +30,9 @@ jobs:
               run: | 
 
                    echo "Affiche L'artifact"
-                   echo "$OUTPUT_CALLER1" > artifact_fichier.txt
+                   echo "$OUTPUT_CALLER1" 
                 
-            - name: Artifact
-              uses: actions/upload-artifact@v7
-              with:
-                name: Artifact_share
-                path: artifact_fichier.txt
+
 
             
                        
