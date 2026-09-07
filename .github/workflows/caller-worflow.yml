@@ -30,7 +30,15 @@ jobs:
               run: | 
 
                    echo "Affiche L'artifact"
-                   echo "$OUTPUT_CALLER1"
+                   echo "$OUTPUT_CALLER1" > artifact_fichier.txt
+                
+            - name: Artifact
+              uses: actions/upload-artifact@v7
+              with:
+                name: Artifact_share
+                path: artifact_fichier.txt
+
+            
                        
 
                      
